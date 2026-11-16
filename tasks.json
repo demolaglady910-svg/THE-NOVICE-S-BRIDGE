@@ -1,0 +1,25 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Start The Novice's Bridge server",
+            "type": "process",
+            "command": "powershell.exe",
+            "args": [
+                "-NoProfile",
+                "-ExecutionPolicy",
+                "Bypass",
+                "-Command",
+                "$listener = Get-NetTCPConnection -LocalPort 5501 -State Listen -ErrorAction SilentlyContinue; if ($listener) { try { $response = Invoke-WebRequest -Uri 'http://127.0.0.1:5501/index.html' -TimeoutSec 3 -UseBasicParsing -ErrorAction Stop } catch { throw \"Port 5501 is already in use but is not serving this app: $($_.Exception.Message)\" }; if ($response.StatusCode -ne 200 -or $response.Content -notmatch 'Install app on this desktop') { throw 'Port 5501 is already in use by a server that is not serving this app.' }; Write-Output 'Serving HTTP on 127.0.0.1 port 5501'; exit 0 }; py -u -m http.server 5501 --bind 127.0.0.1"
+            ],
+            "isBackground": true,
+            "problemMatcher": {
+                "base": "$tsc-watch",
+                "background": {
+                    "activeOnStart": true,
+                    "endsPattern": "Serving HTTP on 127\\.0\\.0\\.1 port 5501"
+                }
+            }
+        }
+    ]
+}

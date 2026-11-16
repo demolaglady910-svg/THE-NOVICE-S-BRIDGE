@@ -1,0 +1,18 @@
+THE NOVICE'S BRIDGE - run and install on your desktop
+
+1. Keep all the app files together in a folder on your Desktop.
+2. Install Python for Windows if it is not already installed; make sure the
+   Python launcher (`py`) is available.
+3. Open that folder in VS Code. Press F5 and choose "Launch Chrome" or
+   "Launch Edge" to start the local server and open the app at
+   http://127.0.0.1:5501/index.html.
+4. In Chrome, select ... > Cast, save, and share > Install page as app.
+   In Edge, select ... > Apps > Install this site as an app. Confirm the prompt.
+   The installed app will appear in the browser's Apps list and Windows Start
+   menu; create a desktop shortcut from the Apps page if desired.
+5. Keep the local server running while using the installed app. This folder does
+   not include a separate Windows installer.
+6. Phone view: in Chrome press F12, then Ctrl+Shift+M.
+
+Admin login: user name ADMIN910 , password Admin910@112
+Freelancers and clients create their own accounts (they must tick the Terms and Conditions box).

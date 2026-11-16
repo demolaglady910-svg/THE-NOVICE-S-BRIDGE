@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#4338ca"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><link rel="manifest" href="./manifest.webmanifest">
+<title>THE NOVICE&#39;S BRIDGE</title>
+<style>
+:root{--bg:#eef1f8;--card:#fff;--tx:#161a2e;--mu:#6a7090;--pr:#4338ca;--ac:#f59e0b;--bd:#dde1ef;--ok:#15803d;--er:#be123c}
+:root[data-t=dark]{--bg:#0e1120;--card:#181c33;--tx:#e8eaf8;--mu:#979cc0;--pr:#8b83ff;--bd:#2a2f52;--ok:#4ade80;--er:#fb7185}
+*{box-sizing:border-box}body{margin:0;font:15px/1.45 system-ui,sans-serif;background:var(--bg);color:var(--tx)}
+#app{max-width:520px;margin:auto;min-height:100vh;padding-bottom:70px;position:relative}
+.top{display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--pr);color:#fff;position:sticky;top:0;z-index:5}
+.top h1{font-size:17px;margin:0;flex:1}.top button{background:none;border:0;color:#fff;font-size:22px}
+.wrap{padding:14px}.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:12px;margin-bottom:10px}
+h2{font-size:16px;margin:4px 0 10px}h3{font-size:14px;margin:0 0 4px}.mu{color:var(--mu);font-size:13px}
+input,select,textarea{width:100%;padding:10px;margin:4px 0 8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+label{font-size:13px;color:var(--mu)}
+button.b{background:var(--pr);color:#fff;border:0;border-radius:8px;padding:10px 14px;font:inherit;font-weight:600;width:100%;margin-top:4px}
+button.s{background:var(--ac);color:#1a1200;border:0;border-radius:8px;padding:6px 10px;font:inherit;font-weight:600}
+button.g{background:none;border:1px solid var(--bd);color:var(--tx);border-radius:8px;padding:6px 10px;font:inherit}
+.pw{position:relative}.pw button{position:absolute;right:6px;top:8px;background:none;border:0;font-size:18px}
+.nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:520px;display:flex;background:var(--card);border-top:1px solid var(--bd);padding-bottom:env(safe-area-inset-bottom)}
+.nav button{flex:1;background:none;border:0;padding:10px 2px;color:var(--mu);font:inherit;font-size:12px}.nav button.on{color:var(--pr);font-weight:700}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 14px 0}.chips button{white-space:nowrap;border:1px solid var(--bd);background:var(--card);color:var(--tx);border-radius:20px;padding:6px 12px;font:inherit;font-size:13px}.chips .on{background:var(--pr);color:#fff;border-color:var(--pr)}
+.tag{display:inline-block;font-size:12px;border-radius:6px;padding:2px 7px;background:var(--bd);margin:2px 3px 2px 0}.ok{color:var(--ok)}.er{color:var(--er)}
+.drawer{position:fixed;inset:0;background:#0007;z-index:9}.drawer div{width:78%;max-width:300px;height:100%;background:var(--card);padding:16px}
+.drawer button{display:block;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--bd);padding:14px 4px;color:var(--tx);font:inherit}
+.hero{padding:64px 20px 28px;text-align:center;background:#14213d;color:#fff;border-radius:0 0 28px 28px}.hero h1{font-size:24px;margin:10px 0 6px}.hero .mu{color:#c9cfee}.hero svg{display:block;margin:auto}
+.adm{position:fixed;top:10px;right:10px;z-index:6}
+.msg{max-width:80%;padding:8px 10px;border-radius:12px;margin:4px 0;background:var(--bd)}.msg.me{margin-left:auto;background:var(--pr);color:#fff}
+.elite{border:2px solid var(--ac);border-radius:14px;padding:18px;text-align:center;background:linear-gradient(135deg,var(--card),#f59e0b22)}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.n{font-size:26px;font-weight:800;color:var(--pr)}
+.tc{max-height:240px;overflow:auto;font-size:13px}.tc h4{margin:12px 0 4px}.tc p{margin:4px 0}.tc ul{padding-left:18px;margin:4px 0}button.b:disabled{opacity:.4}
+.toast{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#161a2e;color:#fff;padding:10px 16px;border-radius:20px;z-index:20;font-size:14px}
+</style></head><body><div id="app"></div>
+<script>
+/* ================= PASTE YOUR FIREBASE CONFIG HERE (replace every PASTE_... value) ================= */
+window.FIREBASE_CONFIG={apiKey:"PASTE_API_KEY",authDomain:"PASTE_AUTH_DOMAIN",projectId:"PASTE_PROJECT_ID",storageBucket:"PASTE_STORAGE_BUCKET",messagingSenderId:"PASTE_SENDER_ID",appId:"PASTE_APP_ID"};
+/* ==================================================================================================== */
+</script>
+<script>
+const K='novices_bridge_v2',CATS=[['🎨','Logo Design'],['🌐','WordPress'],['✍️','Articles'],['🎬','Video Editing'],['👥','Human Resources'],['📊','Business Analytics'],['📣','Marketing'],['💰','Finance'],['📋','General Business Management']];
+let S;try{S=JSON.parse(localStorage.getItem(K))}catch(e){}
+S=Object.assign({n:1001,users:[],proj:[],notes:[],hires:[],chats:{},elite:{},scores:{},fb:[],cp:[],theme:'light',ses:null,adminPw:'Admin910@112'},S||{});
+let CLOUD=!/PASTE/.test(window.FIREBASE_CONFIG.apiKey),READY=!CLOUD;
+function appState(){return S}
+function cloudState(o){if('ready' in o)READY=o.ready;if('on' in o)CLOUD=o.on}
+setTimeout(()=>{if(CLOUD&&!READY){CLOUD=false;READY=true;render();toast('Cloud not reachable. Running on this device only.')}},12000);
+document.addEventListener('focusout',()=>{if(window.__stale){window.__stale=0;setTimeout(()=>{if(!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||''))render()},80)}});
+let V={step:'home',mode:'new',dr:0,at:'ov'};
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(CLOUD?{ses:S.ses,theme:S.theme}:S))}catch(e){}if(CLOUD&&READY&&window.cloudSave)window.cloudSave()},$=i=>document.getElementById(i),val=i=>($(i)||{}).value||'';
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const U=id=>S.users.find(u=>u.id===id)||{first:'?',last:'',id},nm=u=>esc(u.first+' '+u.last),today=()=>new Date().toLocaleDateString('en-GB'),stars=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+const me=()=>U(S.ses.id),note=(to,t)=>S.notes.unshift({to,t,d:today(),r:0});
+function toast(t,duration=2200){const e=document.createElement('div');e.className='toast';e.textContent=t;document.body.appendChild(e);setTimeout(()=>e.remove(),duration)}
+const pw=(id,ph)=>`<div class=pw><input type=password id=${id} placeholder="${ph}"><button type=button onclick="eye('${id}')">👁</button></div>`;
+function eye(id){const e=$(id);e.type=e.type==='password'?'text':'password'}
+function render(){document.documentElement.dataset.t=S.theme;const s=S.ses;$('app').innerHTML=(CLOUD&&!READY)?HERO('Connecting...','Loading shared data',90):!s?landing():s.role==='admin'?adminV():s.role==='f'?freeV():clientV();save()}
+function theme(){S.theme=S.theme==='dark'?'light':'dark';render()}
+function logout(){S.ses=null;V={step:'home',mode:'new',dr:0,at:'ov'};render()}
+/* ---------- entry ---------- */
+const LOGO=n=>`<svg width="${n}" height="${n}" viewBox="0 0 160 160" role="img" aria-label="The Novice's Bridge logo"><rect x="6" y="6" width="148" height="148" rx="38" fill="#4338ca"/><circle cx="134" cy="30" r="8" fill="#f59e0b"/><rect x="45" y="34" width="7" height="62" rx="3" fill="#f59e0b"/><rect x="108" y="34" width="7" height="62" rx="3" fill="#f59e0b"/><path d="M16 92L48.5 40Q80 84 111.5 40L144 92" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" fill="none"/><path d="M64 57V96M80 62V96M96 57V96" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M22 96H138" stroke="#fff" stroke-width="7" stroke-linecap="round"/><path d="M40 96V134M120 96V134" stroke="#fff" stroke-width="4" stroke-linecap="round"/><path d="M40 134C40 100 120 100 120 134" stroke="#fff" stroke-width="6" stroke-linecap="round" fill="none"/></svg>`;
+const HERO=(h,p,n)=>`<div class=hero>${LOGO(n||84)}<h1>${h}</h1><p class=mu>${p}</p></div>`;
+const TERMS=`<p><b>Effective date: 15/11/2026</b></p><p>Welcome to The Novice’s Bridge (“the Platform”, “we”, “us”, “our”). These Terms and Conditions (“Terms”) govern your access to and use of our app and services. By creating an account or using the app, you confirm that you have read, understood and agreed to these Terms. If you do not agree, please do not use the app.</p>
+<h4>1. About the Platform</h4><p>The Novice’s Bridge is a Beginner Project Hub that connects freshers and students in business management (“Freelancers”) with small, beginner-friendly projects posted by individuals, startups and organisations (“Clients”). We provide the space for users to connect. We are not an employer, agent or partner of any user, and we are not a party to any agreement between a Freelancer and a Client.</p>
+<h4>2. Eligibility</h4><ul><li>You must be at least 18 years old, or use the app with the consent and supervision of a parent or guardian.</li><li>Freelancers must be students, fresh graduates or early-career individuals in business management or related fields.</li><li>You must provide accurate, complete and current information during registration.</li></ul>
+<h4>3. Account Registration and Security</h4><ul><li>You may create only one account.</li><li>You are responsible for keeping your password and login details confidential.</li><li>You are responsible for all activity carried out through your account.</li><li>Please inform us immediately of any unauthorised use of your account.</li></ul>
+<h4>4. Freelancer Responsibilities</h4><p>Freelancers agree to:</p><ul><li>Provide true information about their education, skills and experience.</li><li>Deliver original work of reasonable quality within the agreed deadline.</li><li>Avoid plagiarism, copied content or misuse of third-party material.</li><li>Keep all Client information and project details confidential.</li><li>Communicate respectfully and professionally.</li></ul>
+<h4>5. Client Responsibilities</h4><p>Clients agree to:</p><ul><li>Post genuine projects with a clear description, scope, deadline and payment details.</li><li>Pay the agreed amount on time once work is delivered and accepted.</li><li>Avoid requesting illegal, unethical, unsafe or unrelated work.</li><li>Treat Freelancers fairly, giving clear feedback and reasonable time to deliver, as they are beginners.</li></ul>
+<h4>6. Projects and Agreements</h4><ul><li>Project terms (scope, price, deadline, number of revisions) must be agreed between the Client and Freelancer in writing through the app before work begins.</li><li>The Platform does not guarantee the availability, quality or completion of any project.</li></ul>
+<h4>7. Payments and Fees</h4><ul><li>Payment amount, mode and timeline must be agreed before work starts.</li><li>The Platform may charge a service fee or commission, which will be clearly shown before you confirm a transaction.</li><li>Fees paid to the Platform are non-refundable, except where our refund policy allows.</li><li>Users are responsible for any taxes that apply to their earnings or payments.</li></ul>
+<h4>8. Intellectual Property</h4><ul><li>Ownership of completed work transfers to the Client only after full payment, unless both parties agree otherwise.</li><li>Freelancers may show completed work in their portfolio unless the Client requests confidentiality in writing.</li><li>The Platform’s name, logo, design, content and software are our property and may not be copied, modified or distributed without written permission.</li></ul>
+<h4>9. User Content</h4><ul><li>You are responsible for the content you post (profiles, project descriptions, messages, reviews).</li><li>You grant us a non-exclusive right to display your content on the Platform for its operation and promotion.</li><li>We may remove content that violates these Terms or applicable law.</li></ul>
+<h4>10. Prohibited Conduct</h4><p>You must not:</p><ul><li>Provide false, misleading or fraudulent information</li><li>Harass, abuse, threaten or discriminate against any user</li><li>Post offensive, illegal or inappropriate content</li><li>Use the Platform for scams, money laundering or any unlawful activity</li><li>Move transactions outside the Platform to avoid fees</li><li>Collect, share or misuse other users’ personal data</li><li>Hack, disrupt or attempt unauthorised access to the app or its systems</li><li>Create fake accounts or fake reviews</li></ul>
+<h4>11. Privacy and Data Protection</h4><p>We collect and use personal information (such as name, email, phone number, college and skills) only to operate and improve the Platform, verify users and provide support. We do not sell your personal data to third parties. We take reasonable steps to protect your data, but no online system is completely secure. Please read our Privacy Policy for full details.</p>
+<h4>12. Reviews and Ratings</h4><p>Users may rate and review each other after a project. Reviews must be honest, respectful and based on real experience. We may remove reviews that are false, abusive or violate these Terms.</p>
+<h4>13. Dispute Resolution</h4><ul><li>Clients and Freelancers should first try to resolve disagreements directly.</li><li>If unresolved, either party may contact our support team, who will try to mediate fairly.</li><li>Our mediation decision is final within the Platform, without affecting your legal rights.</li></ul>
+<h4>14. Disclaimer and Limitation of Liability</h4><ul><li>The Platform is provided on an “as is” and “as available” basis.</li><li>We do not guarantee uninterrupted service, error-free operation, project availability or income.</li><li>To the extent permitted by law, we are not liable for any loss, damage, delay or dispute arising from the use of the app or from dealings between users.</li></ul>
+<h4>15. Suspension and Termination</h4><p>We may suspend or terminate your account, with or without notice, if you violate these Terms or misuse the Platform. You may delete your account at any time by contacting us. Obligations such as payment and confidentiality continue after termination.</p>
+<h4>16. Changes to These Terms</h4><p>We may update these Terms from time to time. We will notify users of significant changes through the app. Continued use of the app after changes means you accept the updated Terms.</p>
+<h4>17. Governing Law and Jurisdiction</h4><p>These Terms are governed by the laws of India. Any dispute will be subject to the exclusive jurisdiction of the courts at Chennai, Tamil Nadu.</p>
+<h4>18. Contact Us</h4><p>For questions, complaints or support, please contact:<br>The Novice’s Bridge<br>Phone: 8925617353<br>Email: gladynovicebridge9101@gmail.com</p>`;
+function landing(){
+if(V.step==='admin')return `${HERO('Admin login','THE NOVICE&#39;S BRIDGE control room')}<div class=wrap><div class=card><label>User name</label><input id=au autocapitalize=characters>${'<label>Password</label>'+pw('ap','Password')}<button class=b onclick=adminLogin()>Log in</button><button class=g style="width:100%;margin-top:8px" onclick="V.step='home';render()">Back</button></div></div>`;
+if(V.step==='auth'){const f=V.role==='f';return `${HERO(f?'Freelancer':'Client','Create an account or log in')}<div class=wrap><div class=chips style="padding:0 0 10px"><button class="${V.mode==='new'?'on':''}" onclick="V.mode='new';render()">First time here</button><button class="${V.mode==='in'?'on':''}" onclick="V.mode='in';render()">I have an account</button></div><div class=card>${V.mode==='new'?`<input id=fn placeholder="First name"><input id=ln placeholder="Last name"><input id=ph type=tel placeholder="Phone number"><select id=gd><option value="">Gender</option><option>Male</option><option>Female</option></select><input id=ag type=number placeholder="Age"><input id=em type=email placeholder="Email ID">${pw('p1','Create password')}<h3>Terms and Conditions</h3><div class="card tc">${TERMS}</div><label style="display:flex;gap:8px;align-items:flex-start;color:var(--tx)"><input type=checkbox id=tcok style="width:auto;margin:3px 0 0" onchange="$('mk').disabled=!this.checked"><span>I have read and agree to the Terms and Conditions</span></label><button class=b id=mk disabled onclick=signup()>Create account</button>`:`<input id=em type=email placeholder="Email ID">${pw('p1','Password')}<button class=b onclick=login()>Log in</button><button class=g style="width:100%;margin-top:8px" onclick=forgot()>Forgot password? Set a new one</button>`}</div><button class=g onclick="V.step='home';render()">Back</button></div>`}
+return `<button class="s adm" onclick="V.step='admin';render()">🔐 Admin</button>${HERO('THE NOVICE&#39;S BRIDGE','Hire verified freelancers. Get hired for your craft.',120)}<div class=wrap><button class=b style="padding:18px" onclick="V.step='auth';V.role='f';render()">I'm a freelancer</button><br><br><button class=b style="padding:18px;background:var(--ac);color:#1a1200" onclick="V.step='auth';V.role='c';render()">I'm a client</button><button class=b style="margin-top:16px" onclick=installApp()>⬇ Install app on this desktop</button><button class=g style="margin:auto;display:block" onclick=theme()>Switch light / dark</button></div>`}
+function adminLogin(){if(val('au').trim().toUpperCase()==='ADMIN910'&&val('ap')===S.adminPw){S.ses={role:'admin',id:'ADMIN01'};render()}else toast('Wrong user name or password')}
+function signup(){if(!$('tcok')||!$('tcok').checked)return toast('Please agree to the Terms and Conditions first');const u={id:'NB'+S.n,role:V.role,first:val('fn').trim(),last:val('ln').trim(),phone:val('ph').trim(),gender:val('gd'),age:val('ag'),email:val('em').trim().toLowerCase(),pw:val('p1'),cats:[],country:'India'};
+if(!u.first||!u.last||!u.phone||!u.gender||!u.age||!u.email||!u.pw)return toast('Please fill every field');
+if(S.users.some(x=>x.email===u.email))return toast('Email already registered. Use "I have an account"');
+S.n++;S.users.push(u);note('ADMIN','New '+(u.role==='f'?'freelancer':'client')+' joined: '+u.first+' '+u.last);S.ses={role:u.role,id:u.id,tab:u.role==='f'?'hub':'work'};render()}
+function login(){const u=S.users.find(x=>x.email===val('em').trim().toLowerCase()&&x.pw===val('p1')&&x.role===V.role);if(!u)return toast('Email or password not found');S.ses={role:u.role,id:u.id,tab:u.role==='f'?'hub':'work'};render()}
+function forgot(){const e=val('em').trim().toLowerCase(),u=S.users.find(x=>x.email===e&&x.role===V.role);if(!u)return toast('Type your registered email first');const p=prompt('Enter new password');if(!p)return;if(prompt('Retype new password')!==p)return toast('Passwords do not match');u.pw=p;save();toast('Password updated. Log in now.')}
+/* ---------- shared ---------- */
+function shell(title,body,nav,menu){const t=S.ses.tab;return `<div class=top><button onclick="V.dr=1;render()">☰</button><h1>${title}</h1><button onclick=theme()>◐</button></div>${V.dr?`<div class=drawer onclick="V.dr=0;render()"><div onclick=event.stopPropagation()><h2>${nm(me())}</h2><p class=mu>${me().id}</p>${menu.map(m=>`<button onclick="go('${m[0]}')">${m[1]}</button>`).join('')}<button onclick=theme()>🌓 Light / dark theme</button><button onclick=logout()>🚪 Log out</button></div></div>`:''}<div class=wrap>${body}</div><div class=nav>${nav.map(n=>`<button class="${t===n[0]?'on':''}" onclick="go('${n[0]}')">${n[1]}</button>`).join('')}</div>`}
+function go(t){S.ses.tab=t;S.ses.chat=null;V.dr=0;render()}
+function pwForm(){return `<div class=card><h2>Change password</h2><label>New password</label>${pw('n1','New password')}<label>Retype new password</label>${pw('n2','Retype new password')}<button class=b onclick=setPw()>OK, update password</button></div>`}
+function setPw(){const a=val('n1'),b=val('n2');if(!a||a!==b)return toast('Passwords must match');if(S.ses.role==='admin')S.adminPw=a;else me().pw=a;toast('Password updated');render()}
+function notesV(id){const l=S.notes.filter(n=>n.to===id);l.forEach(n=>n.r=1);setTimeout(save,0);return `<h2>Notifications</h2>`+(l.length?l.map(n=>`<div class=card>${esc(n.t)}<div class=mu>${n.d}</div></div>`).join(''):'<p class=mu>Nothing yet.</p>')}
+const unread=id=>S.notes.filter(n=>n.to===id&&!n.r).length;
+function helpV(){const r=S.ses.role;return `<div class=card><h2>Complaint box</h2><select id=ca><option value=${r==='f'?'client':'freelancer'}>Complaint against ${r==='f'?'client':'freelancer'}</option><option value=app>Complaint against the app</option></select><textarea id=ct rows=3 placeholder="Describe the problem"></textarea><button class=b onclick=sendCp()>Send complaint</button></div><div class=card><h2>Rate the app</h2><select id=fs>${[5,4,3,2,1].map(n=>`<option value=${n}>${stars(n)}</option>`).join('')}</select><textarea id=ft rows=3 placeholder="Feedback or suggestion"></textarea><button class=b onclick=sendFb()>Send feedback</button></div>`}
+function sendCp(){if(!val('ct').trim())return toast('Write your complaint');S.cp.push({role:S.ses.role,uid:S.ses.id,against:val('ca'),t:val('ct'),d:today()});note('ADMIN','New complaint from '+me().first);toast('Complaint sent');render()}
+function sendFb(){S.fb.push({role:S.ses.role,uid:S.ses.id,s:+val('fs'),t:val('ft'),d:today()});note('ADMIN','New feedback from '+me().first);toast('Thanks for your feedback');render()}
+function chatList(){const r=S.ses.role,l=S.hires.filter(h=>r==='f'?h.fid===S.ses.id:h.cid===S.ses.id);return `<h2>Chats</h2>`+(l.length?l.map(h=>`<div class=card onclick="S.ses.chat='${h.id}';render()"><h3>${nm(U(r==='f'?h.cid:h.fid))}</h3><span class=mu>${h.cat} · tap to chat</span></div>`).join(''):'<p class=mu>Chat opens after a client hires a freelancer.</p>')}
+function chatV(id){const h=S.hires.find(x=>x.id===id),r=S.ses.role,o=U(r==='f'?h.cid:h.fid),c=S.chats[id]||[];return `<div class=card><button class=g onclick="S.ses.chat=null;render()">← Back</button> <b>${nm(o)}</b> <span class=mu>${h.cat}</span></div><div style="min-height:40vh">${c.map(m=>`<div class="msg ${m.f===r?'me':''}">${esc(m.t)}</div>`).join('')||'<p class=mu>Say hello.</p>'}</div><input id=cm placeholder="Type a message"><button class=b onclick="sendMsg('${id}')">Send</button>`}
+function sendMsg(id){const t=val('cm').trim();if(!t)return;(S.chats[id]=S.chats[id]||[]).push({f:S.ses.role,t});const h=S.hires.find(x=>x.id===id);note(S.ses.role==='f'?h.cid:h.fid,'New message from '+me().first);render()}
+/* ---------- freelancer ---------- */
+function eliteCard(f,e){return `<div class=elite><div class=mu>THE NOVICE&#39;S BRIDGE · Elite Certificate</div><h2 style="font-size:22px">${esc(e.name)}</h2><div>${esc(e.work)}</div><div class=mu>${f.id} · Issued ${e.d}</div><div style="font-size:30px">🏅</div></div>`}
+function freeV(){const u=me(),t=S.ses.tab,e=S.elite[u.id],sc=S.scores[u.id];let b='';
+if(S.ses.chat)b=chatV(S.ses.chat);
+else if(t==='hub')b=`<h2>Project hub</h2><p class=mu>Choose your work areas, then submit your work.</p><div class=chips style="flex-wrap:wrap;padding:0 0 10px">${CATS.map((c,i)=>`<button class="${u.cats.includes(c[1])?'on':''}" onclick="togCat('${c[1]}')">${c[0]} ${c[1]}</button>`).join('')}</div>`+u.cats.map(c=>{const i=CATS.findIndex(x=>x[1]===c);return `<div class=card><h3>${CATS[i][0]} ${c}</h3>${S.proj.filter(p=>p.fid===u.id&&p.cat===c).map(p=>`<div class=mu>• ${esc(p.desc||'Work')} <span class="tag ${p.st!=='pending'?'ok':''}">${p.st}</span></div>`).join('')}<label>Submit project hub: link</label><input id=l${i} placeholder="https://..."><label>Description</label><textarea id=d${i} rows=2 placeholder="About this work"></textarea><label>Logo / document / anything</label><input id=f${i} type=file><button class=b onclick="subProj(${i})">Submit for verification</button></div>`}).join('')
+else if(t==='notes')b=notesV(u.id);
+else if(t==='clients'){b=chatList()}
+else if(t==='help')b=helpV();
+else if(t==='elite')b='<h2>Elite certificate</h2>'+(e&&e.on?eliteCard(u,e):'<p class=mu>You receive this after the admin verifies and hires you.</p>');
+else if(t==='score')b='<h2>Score card</h2>'+(sc?`<div class=card><div style="font-size:26px;color:var(--ac)">${stars(sc.v)}</div><p>${esc(sc.t||'')}</p></div>`:'<p class=mu>No score yet.</p>');
+else if(t==='port')b=`<h2>My portfolio</h2><div class=card><h3>${nm(u)} · ${u.id}</h3><p class=mu>What clients see</p>${sc?`<div style="color:var(--ac)">${stars(sc.v)}</div>`:''}${e&&e.on?eliteCard(u,e):''}${S.proj.filter(p=>p.fid===u.id).map(p=>`<div>• ${p.cat}: ${esc(p.link||p.file||'')} <span class=tag>${p.st}</span></div>`).join('')}</div>`;
+else if(t==='pw')b=pwForm();
+return shell((e&&e.on?'🏅 ':'')+'Freelancer',b,[['hub','🧰 Hub'],['notes','🔔 Alerts'+(unread(u.id)?' ('+unread(u.id)+')':'')],['clients','💬 Clients'],['help','🛟 Help']],[['elite','🏅 Elite certificate'],['score','⭐ Score card'],['port','🗂 Portfolio'],['pw','🔑 Change password']])}
+function togCat(c){const u=me(),i=u.cats.indexOf(c);i<0?u.cats.push(c):u.cats.splice(i,1);render()}
+function subProj(i){const f=$('f'+i).files[0],l=val('l'+i).trim();if(!l&&!f&&!val('d'+i).trim())return toast('Add a link, file or description');S.proj.push({id:'P'+Date.now(),fid:S.ses.id,cat:CATS[i][1],link:l,desc:val('d'+i).trim(),file:f?f.name:'',st:'pending',d:today()});note('ADMIN',me().first+' submitted '+CATS[i][1]+' work to verify');toast('Submitted to admin');render()}
+/* ---------- client ---------- */
+function clientV(){const u=me(),t=S.ses.tab;let b='';
+if(S.ses.chat)b=chatV(S.ses.chat);
+else if(t==='work'){const c=S.ses.cat;if(!c)b=`<h2>What work do you need?</h2>`+CATS.map(x=>`<div class=card onclick="S.ses.cat='${x[1]}';render()"><h3>${x[0]} ${x[1]}</h3><span class=mu>${S.users.filter(f=>f.role==='f'&&f.cats.includes(x[1])).length} freelancers</span></div>`).join('');
+else b=`<button class=g onclick="S.ses.cat=null;render()">← All work</button><h2>${c}</h2>`+(S.users.filter(f=>f.role==='f'&&f.cats.includes(c)).map(f=>{const sc=S.scores[f.id],e=S.elite[f.id],pr=S.proj.filter(p=>p.fid===f.id&&p.cat===c),h=S.hires.some(x=>x.cid===u.id&&x.fid===f.id&&x.cat===c);return `<div class=card><h3>${nm(f)} <span class=mu>${f.id}</span></h3>${pr.some(p=>p.st!=='pending')?'<span class="tag ok">✔ verified</span>':'<span class=tag>not verified yet</span>'}${e&&e.on?'<span class=tag>🏅 Elite</span>':''}${sc?`<div style="color:var(--ac)">${stars(sc.v)}</div>`:''}${pr.map(p=>`<div class=mu>${esc(p.desc||'')} ${esc(p.link||'')}</div>`).join('')}<button class=b ${h?'disabled':''} onclick="hire('${f.id}','${c}')">${h?'Hired ✔ (see Chats)':'Hire this freelancer'}</button></div>`}).join('')||'<p class=mu>No freelancers in this area yet.</p>')}
+else if(t==='chats')b=chatList();else if(t==='help')b=helpV();
+else if(t==='notes')b=notesV(u.id);
+else if(t==='profile')b=`<h2>My information</h2><div class=card>${[['first','First name'],['last','Last name'],['phone','Phone'],['age','Age'],['email','Email']].map(k=>`<label>${k[1]}</label><input id=pf_${k[0]} value="${esc(u[k[0]])}">`).join('')}<button class=b onclick=saveProf()>Save changes</button></div>`;
+else if(t==='pw')b=pwForm();
+return shell('Client',b,[['work','🛠 Work'],['chats','💬 Chats'],['notes','🔔 Alerts'+(unread(u.id)?' ('+unread(u.id)+')':'')],['help','🛟 Help']],[['profile','👤 Personal information'],['pw','🔑 Change password']])}
+function hire(fid,cat){const u=me(),h={id:'H'+Date.now(),cid:u.id,fid,cat,d:today()};S.hires.push(h);note(fid,'Client '+u.first+' '+u.last+' chose you for '+cat+'. Chat is now open.');note('ADMIN','Hire request: '+u.first+' → '+U(fid).first+' ('+cat+')');toast('Freelancer notified. Chat enabled.');render()}
+function saveProf(){const u=me();['first','last','phone','age','email'].forEach(k=>u[k]=val('pf_'+k).trim());toast('Saved');render()}
+/* ---------- admin ---------- */
+const AT=[['ov','Overview'],['fl','Freelancers'],['vh','Verify & hire'],['cl','Clients'],['el','Elite cards'],['sc','Score cards'],['fb','Feedback'],['cp','Complaints'],['st','Settings']];
+function adminV(){const t=V.at,F=S.users.filter(u=>u.role==='f'),C=S.users.filter(u=>u.role==='c'),el=Object.keys(S.elite).filter(k=>S.elite[k].on);let b='';
+if(t==='ov')b=`<h2>Admin overview</h2><p class=mu>Admin: ADMIN01</p><div class=grid><div class=card><div class=n>${C.length}</div>Clients</div><div class=card><div class=n>${F.length}</div>Freelancers</div><div class=card><div class=n>${el.length}</div>Elite cards</div><div class=card><div class=n>${S.hires.length}</div>Hire requests</div></div><h2>Category dashboard</h2>`+CATS.map(c=>{const f=F.filter(u=>u.cats.includes(c[1]));return `<div class=card>${c[0]} <b>${c[1]}</b><div class=mu>${f.length} freelancers · ${f.filter(u=>S.proj.some(p=>p.fid===u.id&&p.cat===c[1]&&p.st!=='pending')).length} verified · ${S.hires.filter(h=>h.cat===c[1]).length} requests</div></div>`}).join('')+`<h2>Notifications</h2>`+S.notes.filter(n=>n.to==='ADMIN').slice(0,8).map(n=>`<div class=card>${esc(n.t)}<div class=mu>${n.d}</div></div>`).join('');
+if(t==='fl')b=`<h2>Freelancers (${F.length})</h2>`+F.map(u=>`<div class=card><h3>${nm(u)} <span class=mu>${u.id} · India</span></h3><span class=tag>${u.cats.length?'Profile done':'Onboarding'}</span><div class=mu>Fresher</div>${u.cats.length?u.cats.map(c=>`<div>${CATS.find(x=>x[1]===c)[0]} ${c} <span class=mu>${S.proj.some(p=>p.fid===u.id&&p.cat===c)?'project submitted':'Demo project pending'}</span></div>`).join(''):'<div class=mu>No skills chosen yet.</div>'}</div>`).join('');
+if(t==='vh')b=`<h2>Submitted work</h2>`+(S.proj.map(p=>`<div class=card><h3>${nm(U(p.fid))} · ${p.cat}</h3><div class=mu>${p.d} · <b>${p.st}</b></div><div>${esc(p.desc)}</div><div class=mu>${esc(p.link)} ${esc(p.file)}</div>${p.st==='pending'?`<button class=b onclick="adminAct('${p.id}','verified')">Verify work</button>`:p.st==='verified'?`<button class=b onclick="adminAct('${p.id}','hired')">Hire this freelancer</button>`:'<span class="tag ok">Hired</span>'}</div>`).join('')||'<p class=mu>No submissions yet.</p>');
+if(t==='cl')b=`<h2>Clients visibility</h2>`+C.map(u=>{const h=S.hires.filter(x=>x.cid===u.id);return `<div class=card><h3>${nm(u)} <span class=mu>${u.id} · India</span></h3>${h.length?h.map(x=>`<div>• ${nm(U(x.fid))} — ${x.cat} · ${x.d}</div>`).join(''):'<div class=mu>No hire requests yet.</div>'}</div>`}).join('');
+if(t==='el'){b=`<h2>Generate elite card</h2><div class=card><label>Freelancer</label><select id=ef>${F.map(u=>`<option value=${u.id}>${nm(u)} (${u.id})</option>`).join('')}</select><label>Freelancer name on the card</label><input id=en><label>Their work</label><input id=ew placeholder="e.g. Logo Design"><label><input type=checkbox id=eo checked style="width:auto"> Enable elite certificate</label><button class=b onclick=mkElite()>Generate card</button></div>`+Object.keys(S.elite).map(k=>eliteCard(U(k),S.elite[k])+`<p class=mu>${S.elite[k].on?'Enabled':'Disabled'} · <a href=# onclick="S.elite['${k}'].on=!S.elite['${k}'].on;render();return false">toggle</a></p>`).join('')}
+if(t==='sc')b=`<h2>Score card rating</h2>`+F.map(u=>`<div class=card><h3>${nm(u)} <span class=mu>${u.id}</span></h3>${S.scores[u.id]?`<div style="color:var(--ac)">${stars(S.scores[u.id].v)}</div>`:''}<select id=sv${u.id}>${[5,4,3,2,1].map(n=>`<option value=${n}>${stars(n)}</option>`).join('')}</select><input id=st${u.id} placeholder="Comment"><button class=b onclick="mkScore('${u.id}')">Update score card</button></div>`).join('');
+if(t==='fb')b=`<h2>Freelancer feedback</h2>`+bx(S.fb.filter(x=>x.role==='f'),1)+`<h2>Client feedback</h2>`+bx(S.fb.filter(x=>x.role==='c'),1);
+if(t==='cp')b=`<h2>Freelancer complaints</h2>`+bx(S.cp.filter(x=>x.role==='f'))+`<h2>Client complaints</h2>`+bx(S.cp.filter(x=>x.role==='c'));
+if(t==='st')b=pwForm()+`<div class=card><button class=b onclick=theme()>Switch dark / light theme</button><button class=g style="width:100%;margin-top:8px" onclick=logout()>Log out</button></div>`;
+return `<div class=top><h1>Admin · ADMIN01</h1><button onclick=theme()>◐</button><button onclick=logout()>⏻</button></div><div class=chips>${AT.map(a=>`<button class="${t===a[0]?'on':''}" onclick="V.at='${a[0]}';render()">${a[1]}</button>`).join('')}</div><div class=wrap>${b}</div>`}
+const bx=(l,f)=>l.map(x=>`<div class=card><b>${nm(U(x.uid))}</b> <span class=mu>${x.d}${x.against?' · against '+x.against:''}</span>${f?`<div style="color:var(--ac)">${stars(x.s)}</div>`:''}<div>${esc(x.t)}</div></div>`).join('')||'<p class=mu>Empty.</p>';
+function adminAct(id,st){const p=S.proj.find(x=>x.id===id);p.st=st;note(p.fid,st==='verified'?'Your '+p.cat+' project was verified by admin.':'🎉 You are hired! Admin has hired you for '+p.cat+'. Your Elite certificate is on the way.');render()}
+function mkElite(){const f=val('ef');if(!f)return toast('No freelancer yet');S.elite[f]={name:val('en')||nm(U(f)),work:val('ew')||'Freelancer',on:$('eo').checked,d:today()};if(S.elite[f].on)note(f,'🏅 Your Elite certificate is ready in the side menu.');toast('Elite card generated');render()}
+function mkScore(id){S.scores[id]={v:+val('sv'+id),t:val('st'+id)};note(id,'⭐ Your score card was updated: '+stars(S.scores[id].v));toast('Score card updated');render()}
+render();
+</script><script type="module">
+const cfg=window.FIREBASE_CONFIG;
+if(!/PASTE/.test(cfg.apiKey)){
+  try{
+    const B="https://www.gstatic.com/firebasejs/10.12.2/";
+    const {initializeApp}=await import(B+"firebase-app.js");
+    const {getFirestore,doc,onSnapshot,setDoc}=await import(B+"firebase-firestore.js");
+    const ref=doc(getFirestore(initializeApp(cfg)),"app","state");
+    const KEYS=['n','users','proj','notes','hires','chats','elite','scores','fb','cp','adminPw'];
+    const last={};let first=true;
+    window.cloudSave=()=>{const S=appState(),patch={};
+      KEYS.forEach(k=>{const j=JSON.stringify(S[k]);if(j!==last[k]){patch[k]=j;last[k]=j}});
+      if(Object.keys(patch).length)setDoc(ref,patch,{merge:true}).catch(e=>toast('Could not save online: '+(e.code||e.message)))};
+    onSnapshot(ref,snap=>{const S=appState(),d=snap.exists()?snap.data():{};let ch=false;
+      KEYS.forEach(k=>{if(d[k]!==undefined&&d[k]!==last[k]){last[k]=d[k];S[k]=JSON.parse(d[k]);ch=true}});
+      if(first){first=false;cloudState({ready:true});cloudSave();render();return}
+      if(ch){const a=document.activeElement;if(a&&/INPUT|TEXTAREA|SELECT/.test(a.tagName))window.__stale=1;else render()}
+    },err=>{cloudState({on:false,ready:true});toast('Cloud not reachable ('+(err.code||'error')+'). Running on this device only.');render()});
+  }catch(e){cloudState({on:false,ready:true});render();setTimeout(()=>toast('Could not load Firebase. Running on this device only.'),300)}
+}
+</script>
+<script>
+let installPromptEvent;
+window.addEventListener('beforeinstallprompt',event=>{
+  event.preventDefault();
+  installPromptEvent=event;
+});
+window.addEventListener('appinstalled',()=>{
+  installPromptEvent=null;
+  toast('App installed successfully');
+});
+async function installApp(){
+  if(!installPromptEvent){
+    toast('Chrome: ... > Cast, save, and share > Install page as app. Edge: ... > Apps > Install this site as an app.',5000);
+    return;
+  }
+  const event=installPromptEvent;
+  installPromptEvent=null;
+  await event.prompt();
+}
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('./service-worker.js').catch(error=>console.error('Service worker registration failed:',error));
+  });
+}
+</script>
+</body></html>
